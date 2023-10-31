@@ -11,5 +11,5 @@
       <link rel="stylesheet" href="../assets/vendor/line-awesome/dist/line-awesome/css/line-awesome.min.css">
       <link rel="stylesheet" href="../assets/vendor/remixicon/fonts/remixicon.css">
       <link rel="stylesheet" href="../assets/vendor/@icon/dripicons/dripicons.css">
-
+      <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
     </head>

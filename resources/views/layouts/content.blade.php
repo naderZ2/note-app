@@ -1,3 +1,6 @@
+<?php
+$idModel=1;
+?>
 <div class="col-lg-12">
     <div class="card card-block card-stretch">
         <div class="card-body custom-notes-space">
@@ -88,7 +91,14 @@
                                             </div>
 
                                             <div class="card-header-toolbar d-flex align-items-center">
-                                                <a href="#" data-toggle="tooltip" data-placement="top" title="" class="show-tab" data-show-tab="[href='#note4']" data-original-title="favorite"><i class="lar la-heart mr-2"></i></a>
+
+
+                                                        <a href="{{route('store.favourite',['note'=>$note->id ,'user'=>$myUser->id])}}"  >
+                                                            <i class="lar la-heart mr-2"></i>
+                                                        </a>
+                                                        <a href="{{route('store.pin',['note'=>$note->id ,'user'=>$myUser->id])}}"  >
+                                                            <i class="las la-thumbtack mr-2"></i>
+                                                        </a>
                                                 <div class="card-header-toolbar d-flex align-items-center">
                                                     <div class="dropdown">
                                                         <span class="dropdown-toggle dropdown-bg" id="dropdownMenuButton12"
@@ -97,11 +107,13 @@
                                                         </span>
                                                         <div class="dropdown-menu dropdown-menu-right"
                                                             aria-labelledby="dropdownMenuButton12" style="">
-                                                            <a href="#new-note{{$note->id}}" class="dropdown-item new-note9" data-toggle="modal"  data-target="#new-note{{$note->id}}"><i class="las la-eye mr-3"></i>View</a>
-                                                            <a href="#edit-note{{$note->id}}" class="dropdown-item edit-note1" data-toggle="modal" data-target="#edit-note{{$note->id}}"><i class="las la-pen mr-3"></i>Edit</a>
-                                                            <a class="dropdown-item" data-extra-toggle="delete" data-closest-elem=".card" href="#"><i class="las la-trash-alt mr-3"></i>Delete</a>
-
-
+                                                            <a href="{{route('view.note',['note'=>$note->id])}}" class="dropdown-item new-note9" ><i class="las la-eye mr-3"></i>View</a>
+                                                            <a href="{{route('edit.note',['note'=>$note->id])}}" class="dropdown-item edit-note1" ><i class="las la-pen mr-3"></i>Edit</a>
+                                                            <form action="{{route("delete.note",['note'=>$note->id])}}" method="post">
+                                                                @csrf
+                                                                @method('delete')
+                                                                <button type="submit" class="dropdown-item" data-extra-toggle="delete" data-closest-elem=".card" href="#"><i class="las la-trash-alt mr-3"></i>Delete </button>
+                                                            </form>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -175,7 +187,7 @@
                             <div class="row">
                                 {{-- ssssssssssssssssssssssssssssssssss --}}
                                 @foreach ($notes as $note)
-                                @if ($note->user_id == $myUser[0]->id)
+                                @if ($note->user_id == $myUser->id)
 
                                 <div class="col-lg-4 col-md-6">
                                     <div class="card card-block card-stretch card-height card-bottom-border-success note-detail">
@@ -232,7 +244,7 @@
                                             </thead>
                                             <tbody>
                                                 @foreach ($notes as $note)
-                                                @if ($note->user_id == $myUser[0]->id)
+                                                @if ($note->user_id == $myUser->id)
                                                 <tr>
                                                     <td>
                                                         <h4 class="mb-2">{{$note->title}}</h4>
@@ -263,7 +275,10 @@
                         <div class="icon active animate__animated animate__fadeIn i-grid">
                             <div class="row">
                                 @foreach ($notes as $note)
-                                @if ($note->user->id == $pins[0]->user_id && $note->id == $pins[0]->note_id)
+                                @foreach ($pins as $pin)
+                                @if ($myUser->id == $pin->user_id && $note->id == $pin->note_id)
+
+
                                 <div class="col-lg-4 col-md-6">
                                     <div class="card card-block card-stretch card-height card-bottom-border-primary note-detail">
                                         <div class="card-header d-flex justify-content-between pb-1">
@@ -304,6 +319,7 @@
                                 </div>
                                 @endif
                                 @endforeach
+                                @endforeach
 
                             </div>
                         </div>
@@ -322,7 +338,10 @@
                                             </thead>
                                             <tbody>
                                                 @foreach ($notes as $note)
-                                                @if ($note->user->id == $pins[0]->user_id && $note->id == $pins[0]->note_id)
+                                                @foreach ($pins as $pin)
+                                                @if ($myUser->id == $pin->user_id && $note->id == $pin->note_id)
+
+
                                                 <tr>
                                                     <td>
                                                         <h4 class="mb-2">{{$note->title}} <i class="las la-thumbtack ml-2"></i></h4>
@@ -342,6 +361,7 @@
                                                 </tr>
                                                 @endif
                                                 @endforeach
+                                                @endforeach
                                             </tbody>
                                         </table>
                                     </div>
@@ -353,7 +373,12 @@
                         <div class="icon active animate__animated animate__fadeIn i-grid">
                             <div class="row">
                                 @foreach ($notes as $note)
-                                @if ($note->user->id == $favourites[0]->user_id && $note->id == $favourites[0]->note_id)
+                                @foreach ($favourites as $favourite)
+                                @if ($myUser->id == $favourite->user_id && $note->id == $favourite->note_id)
+
+
+
+
                                 <div class="col-lg-4 col-md-6">
                                     <div class="card card-block card-stretch card-height card-bottom-border-danger note-detail">
                                         <div class="card-header d-flex justify-content-between pb-1">
@@ -395,6 +420,7 @@
                                 </div>
                                 @endif
                                 @endforeach
+                                @endforeach
                             </div>
                         </div>
                         <div class="icon active animate__animated animate__fadeIn i-list">
@@ -412,7 +438,8 @@
                                             </thead>
                                             <tbody>
                                                 @foreach ($notes as $note)
-                                                @if ($note->user->id == $favourites[0]->user_id && $note->id == $favourites[0]->note_id)
+                                                @foreach ($favourites as $favourite)
+                                                @if ($myUser->id== $favourite->user_id && $note->id == $favourite->note_id)
                                                 <tr>
                                                     <td>
                                                         <h4 class="mb-2">{{$note->title}} <i class="lar la-heart ml-2"></i></h4>
@@ -432,6 +459,7 @@
                                                 </tr>
                                                 @endif
                                                 @endforeach
+                                                @endforeach
                                             </tbody>
                                         </table>
                                     </div>
@@ -445,9 +473,9 @@
     </div>
 </div>
 
-{{-- model show  --}}
-{{-- $theNotesID['id'] --}}
-{{-- <div class="modal fade" id="new-note{{'ss'}}" tabindex="-1" role="dialog" aria-hidden="true">
+{{-- model show   --}}
+
+{{-- <div class="modal fade" id="new-note{{$idModel}}" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-body">
@@ -457,7 +485,7 @@
                         <div class="btn-cancel p-0" data-dismiss="modal"><i class="las la-times"></i></div>
                     </div>
                     <div class="content create-workform">
-                        <p class="mb-4">{{$theIds}}</p>
+                        <p class="mb-4">{{'sssssss'}}</p>
                         <h4 class="mb-3">Shared</h4>
                         <ul class="list-inline p-0 m-0">
                             <li>
